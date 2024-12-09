@@ -7,6 +7,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      includeAssets: ['favicon.svg', 'favicon.ico', 'robots.txt', 'logo.png'],
       manifest: {
         name: 'Yaks Mining',
         short_name: 'YaksMining',
@@ -14,19 +15,25 @@ export default defineConfig({
         display: 'standalone',
         background_color: '#000000',
         theme_color: '#ff0000',
-        description: 'A mining app using MetaMask for authentication.',
+        description: 'A mining app that allows users to mine and earn rewards.',
         icons: [
           {
-            src: '/icons/icon-192x192.png',
+            src: 'pwa-192x192.png',
             sizes: '192x192',
-            type: 'image/png'
+            type: 'image/png',
           },
           {
-            src: '/icons/icon-512x512.png',
+            src: 'pwa-512x512.png',
             sizes: '512x512',
-            type: 'image/png'
-          }
-        ]
+            type: 'image/png',
+          },
+          {
+            src: 'pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any maskable',
+          },
+        ],
       }
     })
   ],
