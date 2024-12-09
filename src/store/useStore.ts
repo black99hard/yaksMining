@@ -62,4 +62,4 @@ export const useStore = create<Store>((set) => ({
         task.id === taskId ? { ...task, completed } : task
       ),
     })),
-}));
+}));  
