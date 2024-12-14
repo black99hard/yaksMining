@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import { UserState, GameState, Task } from '../types';
 
 interface Store {
@@ -24,42 +25,55 @@ const initialAffiliateTasks = [
   { id: 3, description: 'Try out BlockchainBonanza', link: 'https://blockchainbonanza.com/ref789', completed: false, reward: 250 },
 ];
 
-export const useStore = create<Store>((set) => ({
-  user: {
-    isLoggedIn: false,
-    username: '',
-    level: 1,
-    points: 0,
-    tokens: 0,
-    energy: 100,
-    miningPower: 1,
-    isMining: false,
-  },
-  game: {
-    isActive: false,
-    score: 0,
-    currentGame: null,
-  },
-  tasks: initialTasks,
-  affiliateTasks: initialAffiliateTasks,
-  setUser: (userUpdate) =>
-    set((state) => ({
-      user: { ...state.user, ...userUpdate },
-    })),
-  setGame: (gameUpdate) =>
-    set((state) => ({
-      game: { ...state.game, ...gameUpdate },
-    })),
-  updateTask: (taskId, completed) =>
-    set((state) => ({
-      tasks: state.tasks.map((task) =>
-        task.id === taskId ? { ...task, completed } : task
-      ),
-    })),
-  updateAffiliateTask: (taskId, completed) =>
-    set((state) => ({
-      affiliateTasks: state.affiliateTasks.map((task) =>
-        task.id === taskId ? { ...task, completed } : task
-      ),
-    })),
-}));  
+export const useStore = create<Store>()(
+  persist(
+    (set) => ({
+      user: {
+        isLoggedIn: false,
+        username: '',
+        walletAddress: null,
+        level: 1,
+        points: 0,
+        tokens: 0,
+        energy: 100,
+        miningPower: 1,
+        isMining: false,
+      },
+      game: {
+        isActive: false,
+        score: 0,
+        currentGame: null,
+      },
+      tasks: initialTasks,
+      affiliateTasks: initialAffiliateTasks,
+      setUser: (userUpdate) =>
+        set((state) => ({
+          user: { ...state.user, ...userUpdate },
+        })),
+      setGame: (gameUpdate) =>
+        set((state) => ({
+          game: { ...state.game, ...gameUpdate },
+        })),
+      updateTask: (taskId, completed) =>
+        set((state) => ({
+          tasks: state.tasks.map((task) =>
+            task.id === taskId ? { ...task, completed } : task
+          ),
+        })),
+      updateAffiliateTask: (taskId, completed) =>
+        set((state) => ({
+          affiliateTasks: state.affiliateTasks.map((task) =>
+            task.id === taskId ? { ...task, completed } : task
+          ),
+        })),
+    }),
+    {
+      name: 'yaks-mining-storage', // name of the item in localStorage
+      partialize: (state) => ({ 
+        user: state.user,
+        tasks: state.tasks,
+        affiliateTasks: state.affiliateTasks
+      }), // only persist these fields
+    }
+  )
+);  

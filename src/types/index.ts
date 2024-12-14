@@ -15,6 +15,7 @@ export interface GameState {
 export interface UserState {
   isLoggedIn: boolean;
   username: string;
+  walletAddress: string | null;
   level: number;
   points: number;
   tokens: number;

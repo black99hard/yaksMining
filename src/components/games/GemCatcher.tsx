@@ -32,7 +32,7 @@ export const GemCatcher: React.FC = () => {
           const newY = prev.position.y + 5;
           if (newY >= 90) {
             if (Math.abs(prev.position.x - prev.basketPosition) < 10) {
-              setGame({ score: game.score + 1 });
+              setGame(prevGame => ({ ...prevGame, score: prevGame.score + 1 }));
               confetti({
                 particleCount: 50,
                 spread: 60,
@@ -44,7 +44,7 @@ export const GemCatcher: React.FC = () => {
                 type: ['yellow', 'blue', 'red'][Math.floor(Math.random() * 3)],
               };
             } else {
-              setGame({ isActive: false });
+              setGame(prevGame => ({ ...prevGame, isActive: false }));
             }
           }
           return { ...prev, position: { ...prev.position, y: newY } };
@@ -65,9 +65,9 @@ export const GemCatcher: React.FC = () => {
       <motion.div
         className={`absolute w-8 h-8 rounded-full ${
           gemState.type === 'yellow'
-            ? 'bg-red-400'
+            ? 'bg-yellow-400'
             : gemState.type === 'blue'
-            ? 'bg-red-500'
+            ? 'bg-blue-500'
             : 'bg-red-600'
         }`}
         style={{
@@ -81,7 +81,7 @@ export const GemCatcher: React.FC = () => {
       </motion.div>
       <motion.div
         className="absolute bottom-0 w-16 h-4 bg-red-600 rounded-t-full"
-        style={{ left: `${gemState.basketPosition}%` }}
+        style={{ left: `${gemState.basketPosition}%`, transform: 'translateX(-50%)' }}
         animate={{ x: '-50%' }}
         transition={{ type: 'spring', stiffness: 300, damping: 20 }}
       />
